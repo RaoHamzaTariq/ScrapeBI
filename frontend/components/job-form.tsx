@@ -1,7 +1,5 @@
 'use client'
 
-'use client'
-
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -15,7 +13,6 @@ import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Slider } from '@/components/ui/slider'
-import { toast } from 'sonner'
 import { Controller } from 'react-hook-form'
 
 // Define the form schema
@@ -61,28 +58,23 @@ export function JobForm({ onSubmit }: JobFormProps) {
   const renderStrategy = watch('render_strategy')
 
   const onSubmitHandler = async (data: JobFormValues) => {
-    try {
-      const response = await mutation.mutateAsync({
-        url: data.url,
-        wait_time: data.wait_time,
-        render_strategy: data.render_strategy,
-        wait_for_selector: data.wait_for_selector || null,
-        extract_text: data.extract_text,
-        extract_html: data.extract_html,
-        capture_screenshot: data.capture_screenshot,
-      })
-
-      toast.success('Scraping job created successfully!')
-
-      if (onSubmit) {
-        onSubmit(response.id)
-      } else {
-        router.push(`/jobs/${response.id}`)
+    mutation.mutate({
+      url: data.url,
+      wait_time: data.wait_time,
+      render_strategy: data.render_strategy,
+      wait_for_selector: data.wait_for_selector || null,
+      extract_text: data.extract_text,
+      extract_html: data.extract_html,
+      capture_screenshot: data.capture_screenshot,
+    }, {
+      onSuccess: (response) => {
+        if (onSubmit) {
+          onSubmit(response.id)
+        } else {
+          router.push(`/jobs/${response.id}`)
+        }
       }
-    } catch (error: any) {
-      console.error('Error creating job:', error)
-      toast.error(error.response?.data?.detail || 'Failed to create scraping job')
-    }
+    })
   }
 
   return (
@@ -95,6 +87,7 @@ export function JobForm({ onSubmit }: JobFormProps) {
           {...register('url')}
           aria-invalid={!!errors.url}
           aria-describedby={errors.url ? "url-error" : undefined}
+          disabled={mutation.isPending}
         />
         {errors.url && (
           <p id="url-error" className="text-sm text-red-600 mt-1">
@@ -113,7 +106,11 @@ export function JobForm({ onSubmit }: JobFormProps) {
             name="render_strategy"
             control={control}
             render={({ field }) => (
-              <Select onValueChange={field.onChange} value={field.value}>
+              <Select
+                onValueChange={field.onChange}
+                value={field.value}
+                disabled={mutation.isPending}
+              >
                 <SelectTrigger id="render-strategy" aria-label="Select render strategy">
                   <SelectValue placeholder="Select strategy" />
                 </SelectTrigger>
@@ -151,6 +148,7 @@ export function JobForm({ onSubmit }: JobFormProps) {
                   value={[field.value || 0]}
                   onValueChange={(value) => field.onChange(value[0])}
                   aria-label="Wait time in seconds"
+                  disabled={mutation.isPending}
                 />
               )}
             />
@@ -171,6 +169,7 @@ export function JobForm({ onSubmit }: JobFormProps) {
               {...register('wait_for_selector')}
               aria-invalid={!!errors.wait_for_selector}
               aria-describedby={errors.wait_for_selector ? "selector-error" : undefined}
+              disabled={mutation.isPending}
             />
             {errors.wait_for_selector && (
               <p id="selector-error" className="text-sm text-red-600 mt-1">
@@ -204,6 +203,7 @@ export function JobForm({ onSubmit }: JobFormProps) {
                 id="extract-text"
                 checked={field.value}
                 onCheckedChange={field.onChange}
+                disabled={mutation.isPending}
               />
             )}
           />
@@ -226,6 +226,7 @@ export function JobForm({ onSubmit }: JobFormProps) {
                 id="extract-html"
                 checked={field.value}
                 onCheckedChange={field.onChange}
+                disabled={mutation.isPending}
               />
             )}
           />
@@ -248,6 +249,7 @@ export function JobForm({ onSubmit }: JobFormProps) {
                 id="capture-screenshot"
                 checked={field.value}
                 onCheckedChange={field.onChange}
+                disabled={mutation.isPending}
               />
             )}
           />
@@ -259,7 +261,12 @@ export function JobForm({ onSubmit }: JobFormProps) {
           type="submit"
           disabled={mutation.isPending}
         >
-          {mutation.isPending ? 'Creating Job...' : 'Create Scraping Job'}
+          {mutation.isPending ? (
+            <>
+              <span className="h-4 w-4 mr-2 animate-spin rounded-full border-2 border-current border-t-transparent"></span>
+              Creating Job...
+            </>
+          ) : 'Create Scraping Job'}
         </Button>
       </div>
     </form>

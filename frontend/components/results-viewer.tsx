@@ -1,44 +1,76 @@
-import { useState } from 'react'
+'use client'
+
+import { useState, useEffect } from 'react'
+import { useJob, useDownload, usePreview } from '@/lib/hooks'
+import { JobResponse } from '@/lib/types'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { Download, Eye } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card'
+import { Download, Eye, Copy, MonitorSmartphone } from 'lucide-react'
 import { JobStatusIndicator } from './job-status'
-
-interface Job {
-  id: string
-  status: string
-  screenshot_path: string | null
-  html_path: string | null
-  text_content: string | null
-  extract_text: boolean
-  extract_html: boolean
-  capture_screenshot: boolean
-}
+import { Skeleton } from './ui/skeleton'
+import { DownloadButton } from './download-button'
 
 interface ResultsViewerProps {
-  job: Job
+  jobId: string
 }
 
-export function ResultsViewer({ job }: ResultsViewerProps) {
-  const [activeTab, setActiveTab] = useState('preview')
+export function ResultsViewer({ jobId }: ResultsViewerProps) {
+  const { data: jobData, isLoading, isError } = useJob(jobId)
+  const job = jobData as JobResponse | undefined
+  const [activeTab, setActiveTab] = useState<string | undefined>()
+  const [isPreviewMode, setIsPreviewMode] = useState(false)
+  const downloadMutation = useDownload()
+  const previewMutation = usePreview()
+  const [copied, setCopied] = useState(false)
+
+  // Set default active tab based on available content
+  useEffect(() => {
+    if (job) {
+      if (job.capture_screenshot) setActiveTab('screenshot')
+      else if (job.extract_text) setActiveTab('text')
+      else if (job.extract_html) setActiveTab('html')
+    }
+  }, [job])
+
+  // Handle copy to clipboard
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        <div className="h-6 w-1/4 bg-gray-200 rounded animate-pulse"></div>
+        <div className="space-y-2">
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-64 w-full" />
+        </div>
+      </div>
+    )
+  }
+
+  if (isError || !job) {
+    return (
+      <div className="text-center py-12">
+        <h3 className="text-lg font-medium text-gray-900">Error Loading Results</h3>
+        <p className="mt-1 text-sm text-gray-500">
+          Failed to load job results. Please try again.
+        </p>
+      </div>
+    )
+  }
 
   // Download result
-  const downloadResult = async (type: 'html' | 'text' | 'screenshot') => {
-    try {
-      window.open(`/api/v1/jobs/${job.id}/download/${type}`, '_blank')
-    } catch (err) {
-      console.error('Download error:', err)
-    }
+  const handleDownload = async (type: 'html' | 'text' | 'screenshot') => {
+    downloadMutation.mutate({ id: job.id, type })
   }
 
   // Preview result (open in new tab)
-  const previewResult = async (type: 'html' | 'text' | 'screenshot') => {
-    try {
-      window.open(`/api/v1/jobs/${job.id}/preview?result_type=${type}`, '_blank')
-    } catch (err) {
-      console.error('Preview error:', err)
-    }
+  const handlePreview = async (type: 'html' | 'text' | 'screenshot') => {
+    previewMutation.mutate({ id: job.id, type })
   }
 
   return (
@@ -70,93 +102,118 @@ export function ResultsViewer({ job }: ResultsViewerProps) {
 
           {job.extract_html && (
             <TabsContent value="html" className="space-y-4">
-              <div className="flex space-x-2">
+              <div className="flex flex-wrap gap-2">
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => previewResult('html')}
+                  onClick={() => setIsPreviewMode(!isPreviewMode)}
                 >
-                  <Eye className="h-4 w-4 mr-2" />
-                  Preview
+                  <MonitorSmartphone className="h-4 w-4 mr-2" />
+                  {isPreviewMode ? 'Code View' : 'Preview'}
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => downloadResult('html')}
+                  onClick={() => job.text_content && copyToClipboard(job.text_content)}
+                  disabled={!job.text_content}
+                >
+                  <Copy className="h-4 w-4 mr-2" />
+                  {copied ? 'Copied!' : 'Copy'}
+                </Button>
+                <DownloadButton
+                  jobId={job.id}
+                  resultType="html"
+                  variant="outline"
+                  size="sm"
                 >
                   <Download className="h-4 w-4 mr-2" />
                   Download
-                </Button>
+                </DownloadButton>
               </div>
-              <Card className="p-4 bg-gray-900 text-gray-100 overflow-x-auto">
-                <pre className="text-xs">
-                  {job.text_content && (job.text_content.length < 10000)
-                    ? job.text_content
-                    : 'HTML content too large to display. Use Preview or Download to view.'}
-                </pre>
-              </Card>
+              {isPreviewMode ? (
+                <Card className="p-0 overflow-hidden">
+                  <iframe
+                    src={`/api/v1/jobs/${job.id}/preview?result_type=html`}
+                    className="w-full h-[500px] border-0"
+                    title="HTML Preview"
+                  />
+                </Card>
+              ) : (
+                <Card className="p-0 overflow-hidden">
+                  <pre className="text-xs p-4 max-h-[500px] overflow-auto bg-gray-900 text-gray-100">
+                    {job.text_content && (job.text_content.length < 100000)
+                      ? job.text_content
+                      : 'HTML content too large to display. Use Download to view.'}
+                  </pre>
+                </Card>
+              )}
             </TabsContent>
           )}
 
           {job.extract_text && (
             <TabsContent value="text" className="space-y-4">
-              <div className="flex space-x-2">
+              <div className="flex flex-wrap gap-2">
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => previewResult('text')}
+                  onClick={() => job.text_content && copyToClipboard(job.text_content)}
+                  disabled={!job.text_content}
                 >
-                  <Eye className="h-4 w-4 mr-2" />
-                  Preview
+                  <Copy className="h-4 w-4 mr-2" />
+                  {copied ? 'Copied!' : 'Copy'}
                 </Button>
-                <Button
+                <DownloadButton
+                  jobId={job.id}
+                  resultType="text"
                   variant="outline"
                   size="sm"
-                  onClick={() => downloadResult('text')}
                 >
                   <Download className="h-4 w-4 mr-2" />
                   Download
-                </Button>
+                </DownloadButton>
               </div>
-              <Card className="p-4 bg-gray-50 min-h-[200px] whitespace-pre-wrap">
-                {job.text_content ? (
-                  <>{job.text_content}</>
-                ) : (
-                  <p className="text-gray-500">No text content extracted</p>
-                )}
+              <Card className="p-0 overflow-hidden">
+                <pre className="text-sm p-4 max-h-[500px] overflow-auto whitespace-pre-wrap break-words bg-gray-50">
+                  {job.text_content ? (
+                    job.text_content
+                  ) : (
+                    <p className="text-gray-500 italic">No text content extracted</p>
+                  )}
+                </pre>
               </Card>
             </TabsContent>
           )}
 
           {job.capture_screenshot && (
             <TabsContent value="screenshot" className="space-y-4">
-              <div className="flex space-x-2">
+              <div className="flex flex-wrap gap-2">
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => previewResult('screenshot')}
+                  onClick={() => handlePreview('screenshot')}
                 >
                   <Eye className="h-4 w-4 mr-2" />
-                  Preview
+                  Open in Tab
                 </Button>
-                <Button
+                <DownloadButton
+                  jobId={job.id}
+                  resultType="screenshot"
                   variant="outline"
                   size="sm"
-                  onClick={() => downloadResult('screenshot')}
                 >
                   <Download className="h-4 w-4 mr-2" />
                   Download
-                </Button>
+                </DownloadButton>
               </div>
               <div className="flex justify-center">
                 {job.screenshot_path ? (
                   <img
                     src={`/api/v1/jobs/${job.id}/preview?result_type=screenshot`}
                     alt="Screenshot result"
-                    className="max-w-full h-auto border rounded"
+                    className="max-w-full h-auto border rounded shadow-sm object-contain max-h-[600px]"
                   />
                 ) : (
-                  <div className="flex items-center justify-center h-96 w-full border-2 border-dashed rounded-md">
+                  <div className="flex items-center justify-center h-96 w-full border-2 border-dashed border-gray-300 rounded-md bg-gray-50">
                     <p className="text-gray-500">No screenshot captured</p>
                   </div>
                 )}

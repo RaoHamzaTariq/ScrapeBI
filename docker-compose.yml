@@ -3,7 +3,7 @@ version: '3.8'
 services:
   db:
     image: postgres:15
-    container_name: scrapeflow_db
+    container_name: scrapebi_db
     environment:
       POSTGRES_DB: scraping
       POSTGRES_USER: user
@@ -19,11 +19,20 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - scrapeflow_network
+      - scrapebi_network
+    # Add resource limits for production
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
 
   redis:
     image: redis:7-alpine
-    container_name: scrapeflow_redis
+    container_name: scrapebi_redis
     ports:
       - "6379:6379"
     volumes:
@@ -34,11 +43,20 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - scrapeflow_network
+      - scrapebi_network
+    # Add resource limits for production
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.25'
+        reservations:
+          memory: 128M
+          cpus: '0.1'
 
   minio:
     image: minio/minio:latest
-    container_name: scrapeflow_minio
+    container_name: scrapebi_minio
     ports:
       - "9000:9000"
       - "9001:9001"
@@ -54,15 +72,66 @@ services:
       timeout: 20s
       retries: 3
     networks:
-      - scrapeflow_network
+      - scrapebi_network
+    # Add resource limits for production
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
 
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: scrapeflow_backend
+    container_name: scrapebi_backend
     ports:
       - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://user:pass@db:5432/scraping
+      - REDIS_URL=redis://redis:6379/0
+      - MINIO_ENDPOINT=minio:9000
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+      - MINIO_BUCKET=scraping-bucket
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - MAX_CONCURRENT_JOBS=5
+      - DEFAULT_TIMEOUT=300
+      - ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001,https://scrapebi.com
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - scrapebi_network
+    # Add resource limits for production
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '1'
+        reservations:
+          memory: 512M
+          cpus: '0.5'
+
+  worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: scrapebi_worker
+    command: celery -A app.tasks.scrape worker --loglevel=info --pool=solo
     environment:
       - DATABASE_URL=postgresql+asyncpg://user:pass@db:5432/scraping
       - REDIS_URL=redis://redis:6379/0
@@ -81,45 +150,24 @@ services:
         condition: service_healthy
       minio:
         condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
     networks:
-      - scrapeflow_network
-
-  worker:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: scrapeflow_worker
-    command: celery -A app.tasks.scrape worker --loglevel=info
-    environment:
-      - DATABASE_URL=postgresql+asyncpg://user:pass@db:5432/scraping
-      - REDIS_URL=redis://redis:6379/0
-      - MINIO_ENDPOINT=minio:9000
-      - MINIO_ACCESS_KEY=minioadmin
-      - MINIO_SECRET_KEY=minioadmin
-      - MINIO_BUCKET=scraping-bucket
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - CELERY_RESULT_BACKEND=redis://redis:6379/0
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-      minio:
-        condition: service_healthy
-    networks:
-      - scrapeflow_network
+      - scrapebi_network
+    # Add resource limits for production
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1'
+        reservations:
+          memory: 1G
+          cpus: '0.5'
 
   scheduler:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: scrapeflow_scheduler
-    command: celery -A app.tasks.scrape beat --loglevel=info
+    container_name: scrapebi_scheduler
+    command: celery -A app.tasks.scrape beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     environment:
       - DATABASE_URL=postgresql+asyncpg://user:pass@db:5432/scraping
       - REDIS_URL=redis://redis:6379/0
@@ -137,13 +185,46 @@ services:
       minio:
         condition: service_healthy
     networks:
-      - scrapeflow_network
+      - scrapebi_network
+    # Add resource limits for production
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.25'
+        reservations:
+          memory: 128M
+          cpus: '0.1'
+
+  # Flower monitoring for Celery
+  flower:
+    image: mher/flower:2.0.0
+    container_name: scrapebi_flower
+    ports:
+      - "5555:5555"
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - FLOWER_PORT=5555
+    command: ["celery", "flower", "--broker=redis://redis:6379/0", "--port=5555"]
+    depends_on:
+      - redis
+    networks:
+      - scrapebi_network
+    # Add resource limits for production
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.25'
+        reservations:
+          memory: 128M
+          cpus: '0.1'
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: scrapeflow_frontend
+    container_name: scrapebi_frontend
     ports:
       - "3000:3000"
     environment:
@@ -152,16 +233,25 @@ services:
     depends_on:
       - backend
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
       interval: 30s
       timeout: 10s
       retries: 3
     networks:
-      - scrapeflow_network
+      - scrapebi_network
+    # Add resource limits for production
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
 
   nginx:
     image: nginx:alpine
-    container_name: scrapeflow_nginx
+    container_name: scrapebi_nginx
     ports:
       - "80:80"
       - "443:443"
@@ -176,7 +266,16 @@ services:
       timeout: 10s
       retries: 3
     networks:
-      - scrapeflow_network
+      - scrapebi_network
+    # Add resource limits for production
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: '0.25'
+        reservations:
+          memory: 64M
+          cpus: '0.1'
 
 volumes:
   postgres_data:
@@ -184,5 +283,5 @@ volumes:
   minio_data:
 
 networks:
-  scrapeflow_network:
+  scrapebi_network:
     driver: bridge

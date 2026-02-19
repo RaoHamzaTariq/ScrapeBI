@@ -7,20 +7,21 @@ import {
   createEventSource
 } from '../api';
 import { JobResponse, JobListResponse, JobCreateRequest, SSEUpdate } from '../types';
+import { toast } from 'sonner';
 
 export const useJob = (id: string) => {
   return useQuery<JobResponse, Error>({
     queryKey: ['job', id],
     queryFn: () => getJob(id),
-    refetchInterval: (data) => {
+    refetchInterval: (query) => {
       // Only refetch while job is running or pending
-      if (data && ['pending', 'running'].includes(data.status)) {
+      if (query.state.data && ['pending', 'running'].includes(query.state.data.status)) {
         return 3000; // Refetch every 3 seconds
       }
       return false; // Don't refetch when job is complete
     },
     staleTime: 1000, // Refresh immediately
-    cacheTime: 5 * 60 * 1000, // Cache for 5 minutes
+    retry: 1 // Retry failed requests once
   });
 };
 
@@ -29,6 +30,7 @@ export const useJobs = (page: number = 1, limit: number = 10) => {
     queryKey: ['jobs', page, limit],
     queryFn: () => listJobs(page, limit),
     staleTime: 5000, // Refresh every 5 seconds
+    retry: 1 // Retry failed requests once
   });
 };
 
@@ -43,7 +45,17 @@ export const useCreateJob = () => {
 
       // Invalidate and refetch the jobs list
       queryClient.invalidateQueries({ queryKey: ['jobs'] });
+
+      toast.success('Job created successfully', {
+        description: `Job ${data.id} has been created and is being processed`
+      });
     },
+    onError: (error) => {
+      console.error('Error creating job:', error);
+      toast.error('Failed to create job', {
+        description: error.message || 'Please check your input and try again'
+      });
+    }
   });
 };
 
@@ -62,7 +74,17 @@ export const useCancelJob = () => {
 
       // Invalidate and refetch the jobs list
       queryClient.invalidateQueries({ queryKey: ['jobs'] });
+
+      toast.success('Job canceled', {
+        description: 'Job has been successfully canceled'
+      });
     },
+    onError: (error) => {
+      console.error('Error canceling job:', error);
+      toast.error('Failed to cancel job', {
+        description: error.message || 'Please try again'
+      });
+    }
   });
 };
 
@@ -91,6 +113,10 @@ export const useJobSSE = (id: string, onMessage: (data: SSEUpdate) => void) => {
     eventSource.addEventListener('error', (error) => {
       console.error('SSE connection error:', error);
       eventSource.close();
+      // Optionally try to reconnect after a delay
+      setTimeout(() => {
+        // This would need to be implemented as a recursive function for auto-reconnect
+      }, 5000);
     });
 
     return eventSource;

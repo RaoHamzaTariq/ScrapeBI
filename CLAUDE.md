@@ -4,7 +4,7 @@
 You are my Assistant and your name is "Leadia" and your task is to help me to create this project
 
 ## Project Overview
-Building "ScrapeFlow" - a production-ready no-code web scraping system where non-technical users enter a URL and receive fully rendered page data (HTML, text, screenshot) through an automated browser session.
+Building "ScrapeBI" - a production-ready no-code web scraping system where non-technical users enter a URL and receive fully rendered page data (HTML, text, screenshot) through an automated browser session.
 
 ## Core Philosophy
 - **Zero-code experience**: Users never write code
@@ -254,7 +254,7 @@ API_URL=http://backend:8000
 ## Folder Structure
 
 ```
-scrapeflow/
+scrapebi/
 ├── docker-compose.yml
 ├── .env.example
 ├── backend/

@@ -28,6 +28,7 @@ class Settings(BaseSettings):
     # Security settings
     allowed_domains: Optional[str] = None  # Comma-separated list of allowed domains
     blocked_ips: Optional[str] = None  # Comma-separated list of blocked IPs
+    allowed_origins: Optional[str] = "*"  # Comma-separated list of allowed origins
 
     class Config:
         env_file = ".env"

@@ -14,14 +14,38 @@ export function formatDate(date: string | Date, format: string = 'PPpp'): string
 }
 
 // Format file size
-export function formatFileSize(bytes: number): string {
+export function formatBytes(bytes: number): string {
   if (bytes === 0) return '0 Bytes'
 
   const k = 1024
-  const sizes = ['Bytes', 'KB', 'MB', 'GB']
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
   const i = Math.floor(Math.log(bytes) / Math.log(k))
 
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
+}
+
+// Format duration in milliseconds to human readable string
+export function formatDuration(ms: number): string {
+  if (ms < 1000) {
+    return `${ms}ms`
+  }
+
+  const seconds = Math.floor(ms / 1000)
+  if (seconds < 60) {
+    return `${seconds}s`
+  }
+
+  const minutes = Math.floor(seconds / 60)
+  const remainingSeconds = seconds % 60
+
+  if (minutes < 60) {
+    return `${minutes}m ${remainingSeconds}s`
+  }
+
+  const hours = Math.floor(minutes / 60)
+  const remainingMinutes = minutes % 60
+
+  return `${hours}h ${remainingMinutes}m`
 }
 
 // Generate a random ID
@@ -39,5 +63,16 @@ export function debounce<T extends (...args: any[]) => any>(func: T, wait: numbe
     }
     if (timeout) clearTimeout(timeout)
     timeout = setTimeout(later, wait)
+  }
+}
+
+// Copy text to clipboard
+export async function copyToClipboard(text: string): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(text)
+    return true
+  } catch (err) {
+    console.error('Failed to copy text: ', err)
+    return false
   }
 }

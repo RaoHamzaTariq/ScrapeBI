@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { JobCreateRequest, JobResponse, JobListResponse, JobStatus } from './types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
@@ -32,13 +32,13 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       // Handle unauthorized access
       localStorage.removeItem('token');
-      window.location.href = '/login';
+      // Note: Don't redirect to login since this is a public app
     }
     return Promise.reject(error);
   }
 );
 
-// API functions
+// API functions with proper error handling
 export const createJob = async (data: JobCreateRequest): Promise<JobResponse> => {
   const response = await api.post<JobResponse>('/api/v1/jobs', data);
   return response.data;

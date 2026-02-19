@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { downloadResult, previewResult } from '../api';
+import { toast } from 'sonner';
 
 export const useDownload = () => {
   return useMutation({
@@ -32,7 +33,17 @@ export const useDownload = () => {
       link.click();
       link.remove();
       window.URL.revokeObjectURL(url);
+
+      toast.success('Download started', {
+        description: `Your ${type} file is downloading`
+      });
     },
+    onError: (error) => {
+      console.error('Error downloading file:', error);
+      toast.error('Download failed', {
+        description: error.message || 'Please try again'
+      });
+    }
   });
 };
 
@@ -44,5 +55,11 @@ export const usePreview = () => {
       // Open the preview in a new tab/window
       window.open(url, '_blank', 'noopener,noreferrer');
     },
+    onError: (error) => {
+      console.error('Error opening preview:', error);
+      toast.error('Preview failed', {
+        description: error.message || 'Please try again'
+      });
+    }
   });
 };
