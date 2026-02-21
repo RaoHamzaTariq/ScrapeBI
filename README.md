@@ -1,259 +1,241 @@
-# ScrapeBI - No-Code Web Scraping Platform
+# 🕷️ Web Scraper Pro - No-Code Web Scraping Tool
 
-A production-ready, no-code web scraping system where non-technical users enter a URL and receive fully rendered page data (HTML, text, screenshot) through an automated browser session.
+A powerful, user-friendly web scraping tool built with Python, Selenium, and Flask. Features a visual element selector that allows you to extract data from websites without writing any code.
 
-## 🚀 Features
+![Web Scraper Pro](https://img.shields.io/badge/Web%20Scraper%20Pro-v1.0-blue)
+![Python](https://img.shields.io/badge/Python-3.8+-green)
+![Flask](https://img.shields.io/badge/Flask-2.3.3-orange)
+![Selenium](https://img.shields.io/badge/Selenium-4.15.2-red)
 
-- **Zero-code experience**: Users never write code
-- **Production-ready**: Proper error handling, retries, monitoring
-- **Scalable**: Queue-based architecture allowing horizontal worker scaling
-- **Containerized**: Single `docker-compose up` deployment
-- **Real-time monitoring**: Job status updates with SSE
-- **Admin interface**: Flower monitoring for Celery tasks
-- **Metrics**: Prometheus integration for monitoring
+## ✨ Features
 
-## 🛠️ Tech Stack
-
-### Backend
-- **Framework**: FastAPI (Python 3.11+)
-- **Browser Automation**: Playwright
-- **Database**: PostgreSQL 15
-- **Queue**: Redis + Celery
-- **Storage**: MinIO (S3-compatible)
-
-### Frontend
-- **Framework**: Next.js 14 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS + shadcn/ui components
-
-### Infrastructure
-- **Containerization**: Docker & Docker Compose
-- **Reverse Proxy**: Nginx
-- **Monitoring**: Prometheus + Flower for Celery
-
-## 📋 Requirements
-
-- Docker Engine (20.10.0+)
-- Docker Compose (v2+)
-- Make (optional, for convenience commands)
+- 🔍 **Visual Element Selector** - Click on elements in a live preview to select them
+- 📋 **Element Detection** - Automatically detects and categorizes all page elements
+- 🎯 **No-Code Extraction** - Create extraction rules with CSS selectors, XPath, or element properties
+- 📊 **Multiple Export Formats** - Export data as JSON, CSV, or TXT
+- 🖥️ **Modern UI** - Clean, responsive interface with real-time previews
+- ⚡ **Quick Extract** - One-click extraction of common elements (headings, links, images, etc.)
+- 💾 **Save Rules** - Save and reuse extraction rules across different pages
+- 🔄 **Batch Processing** - Run multiple extraction rules at once
 
 ## 🚀 Quick Start
 
-### 1. Clone the repository
+### Prerequisites
+
+- Python 3.8 or higher
+- Google Chrome browser (ChromeDriver will be auto-installed)
+
+### Installation
+
+1. **Extract the project files** to a folder
+
+2. **Navigate to the project directory:**
 ```bash
-git clone <your-repo-url>
-cd scrapebi
+cd web_scraper_project
 ```
 
-### 2. Set up environment variables
+3. **Install dependencies:**
 ```bash
-cp backend/.env.example backend/.env
-cp frontend/.env.example frontend/.env.local
+pip install -r requirements.txt
 ```
 
-### 3. Start the application
+Or simply run:
 ```bash
-make up
-# or
-docker-compose up -d
+python run.py
 ```
+The script will automatically check and install missing dependencies.
 
-### 4. Initialize the database
+### Running the Application
+
+**Option 1: Using the main runner (Recommended)**
 ```bash
-make migrate
-# or
-docker-compose exec backend alembic upgrade head
+python run.py
 ```
 
-### 5. Access the application
-- **Frontend**: http://localhost:3000
-- **API Docs**: http://localhost:8000/docs
-- **API Health**: http://localhost:8000/health
-- **Metrics**: http://localhost:8000/metrics
-- **Flower Monitoring**: http://localhost:5555
-- **MinIO Console**: http://localhost:9001 (admin:minioadmin)
-
-## 🛠️ Development Commands
-
+**Option 2: Using Flask directly**
 ```bash
-make up           # Start all services in detached mode
-make down         # Stop all services
-make logs         # View logs from all services
-make logs-f       # View logs in follow mode
-make shell        # Open shell in backend container
-make migrate      # Run database migrations
-make worker       # View worker logs
-make flower       # Open Flower monitoring
-make test         # Run tests (if applicable)
-make clean        # Stop all services and remove volumes
-make rebuild      # Rebuild services with no cache
+python app.py
 ```
 
-## 🏗️ Architecture
+The application will:
+- Start the Flask server at `http://localhost:5000`
+- Automatically open your web browser
+- Display the Web Scraper Pro interface
+
+## 📖 How to Use
+
+### 1. Scrape a Website
+
+1. Enter the URL of the website you want to scrape
+2. Set the wait time (how long to wait for the page to load)
+3. Click the **"Scrape"** button
+
+### 2. Visual Element Selector
+
+- Switch to the **"Visual Selector"** tab
+- See a live preview of the scraped page
+- Hover over elements to highlight them
+- Click on any element to select it
+- View the element's details and create an extraction rule
+
+### 3. Element List
+
+- Switch to the **"Element List"** tab
+- Browse elements organized by category:
+  - Headings (H1-H6)
+  - Links
+  - Images
+  - Paragraphs
+  - Tables
+  - Lists
+  - Forms
+  - Buttons
+  - Input fields
+- Click on any element to select it
+
+### 4. Create Extraction Rules
+
+1. Click **"Add Rule"** or select an element
+2. Enter a name for the rule
+3. Choose the selector type:
+   - **CSS Selector** - Most common (e.g., `.class`, `#id`, `div > p`)
+   - **XPath** - For complex selections
+   - **Tag Name** - Select by HTML tag
+   - **Class Name** - Select by class
+   - **ID** - Select by ID
+4. Enter the selector value
+5. Choose what to extract:
+   - Text Content
+   - HTML Content
+   - Href (for links)
+   - Src (for images)
+   - Alt text
+   - Title attribute
+   - And more...
+6. Click **"Save Rule"**
+
+### 5. Run Extraction
+
+- Click the play button (▶) on any rule to run it
+- Or click **"Run All Rules"** to execute all rules at once
+- View results in the **"Results"** tab
+
+### 6. Export Data
+
+- Switch to the **"Results"** tab
+- Click **JSON**, **CSV**, or **TXT** to export in your preferred format
+
+## 🎯 Quick Extract Shortcuts
+
+Use the sidebar to quickly extract common elements:
+- **All Headings** - Extract all H1-H6 elements
+- **All Links** - Extract all link URLs
+- **All Images** - Extract all image sources
+- **All Paragraphs** - Extract all paragraph text
+- **All Tables** - Extract all table HTML
+
+## 📝 CSS Selector Examples
+
+| Selector | Description |
+|----------|-------------|
+| `.title` | Elements with class "title" |
+| `#header` | Element with ID "header" |
+| `h1, h2, h3` | All heading elements |
+| `a[href^="https"]` | Links starting with "https" |
+| `div > p` | Direct child paragraphs |
+| `.product .price` | Price elements inside product |
+| `[data-testid]` | Elements with data-testid attribute |
+
+## 🏗️ Project Structure
 
 ```
-┌─────────────┐      ┌──────────────┐      ┌─────────────┐
-│   Next.js   │──────│   FastAPI    │──────│  PostgreSQL │
-│   Frontend  │      │    API       │      │   (Jobs)    │
-└─────────────┘      └──────────────┘      └─────────────┘
-                            │
-                            ▼
-                     ┌──────────────┐
-                     │    Redis     │
-                     │    Queue     │
-                     └──────────────┘
-                            │
-                            ▼
-                     ┌──────────────┐
-                     │   Celery     │
-                     │   Workers    │
-                     └──────────────┘
-                            │
-                    ┌───────┴───────┐
-                    ▼               ▼
-              ┌─────────┐     ┌─────────┐
-              │Playwright│     │  MinIO  │
-              │ Browser │     │Storage  │
-              └─────────┘     └─────────┘
+web_scraper_project/
+├── app.py                 # Main Flask application
+├── run.py                 # Entry point script
+├── requirements.txt       # Python dependencies
+├── README.md             # This file
+├── templates/
+│   └── index.html        # Main UI template
+└── static/
+    └── js/
+        └── app.js        # Frontend JavaScript
 ```
 
-## 📊 API Endpoints
+## 🔧 Advanced Usage
 
-### Jobs API
-- `POST /api/v1/jobs` - Create scraping job
-- `GET /api/v1/jobs/{id}` - Get job status/results
-- `GET /api/v1/jobs/{id}/stream` - SSE for real-time updates
-- `DELETE /api/v1/jobs/{id}` - Cancel job (if pending)
-- `GET /api/v1/jobs` - List jobs (pagination)
+### Custom Wait Time
 
-### Results API
-- `GET /api/v1/jobs/{id}/download/{type}` - Download HTML/text/screenshot
-- `GET /api/v1/jobs/{id}/preview` - Inline preview (for iframe)
+Increase the wait time for pages that load slowly or have heavy JavaScript:
+- Default: 3 seconds
+- Range: 1-10 seconds
 
-## 📁 Project Structure
+### Batch Extraction
 
-```
-scrapebi/
-├── docker-compose.yml
-├── .env.example
-├── Makefile
-├── nginx/
-│   └── nginx.conf
-├── backend/
-│   ├── app/
-│   │   ├── main.py
-│   │   ├── config.py
-│   │   ├── api/
-│   │   ├── core/
-│   │   ├── models/
-│   │   ├── schemas/
-│   │   ├── services/
-│   │   └── tasks/
-│   ├── requirements.txt
-│   ├── Dockerfile
-│   └── .dockerignore
-└── frontend/
-    ├── app/
-    ├── components/
-    ├── lib/
-    ├── package.json
-    └── .dockerignore
-```
+Create multiple rules and run them all at once:
+1. Create rules for different data points
+2. Click **"Run All Rules"**
+3. All results will be displayed together
 
-## 🧪 Environment Variables
+### Saved Rules
 
-### Backend (.env)
-```bash
-DATABASE_URL=postgresql+asyncpg://user:pass@db:5432/scraping
-REDIS_URL=redis://redis:6379/0
-MINIO_ENDPOINT=minio:9000
-MINIO_ACCESS_KEY=minioadmin
-MINIO_SECRET_KEY=minioadmin
-MINIO_BUCKET=scraping-bucket
-CELERY_BROKER_URL=redis://redis:6379/0
-CELERY_RESULT_BACKEND=redis://redis:6379/0
-MAX_CONCURRENT_JOBS=5
-DEFAULT_TIMEOUT=300
-```
+Rules are saved in memory during the session. To reuse rules:
+1. Create and save rules
+2. They appear in the sidebar
+3. Run them anytime during your session
 
-### Frontend (.env.local)
-```bash
-NEXT_PUBLIC_API_URL=http://localhost:8000
-API_URL=http://backend:8000
-```
+## 🛠️ Troubleshooting
 
-## 🛡️ Security Features
+### ChromeDriver Issues
 
-- URL validation (prevents file://, localhost, internal IPs)
-- Rate limiting (Redis-based, per-IP)
-- File size limits (screenshot max 10MB)
-- Content Security Policy headers
-- No SSRF vulnerabilities
-- Input validation and sanitization
+If you see ChromeDriver errors:
+1. Make sure Google Chrome is installed
+2. The webdriver-manager will auto-download the correct ChromeDriver
+3. If issues persist, manually install ChromeDriver matching your Chrome version
 
-## 📈 Production Features
+### Page Not Loading
 
-- **Monitoring**: Prometheus metrics and Flower for Celery
-- **Logging**: Structured JSON logging with correlation IDs
-- **Security**: HTTPS-ready configuration, security headers
-- **Performance**: Gzip compression, caching, optimized assets
-- **Reliability**: Health checks, graceful shutdowns, retry logic
-- **Resource management**: Docker resource limits and monitoring
+If a page doesn't load properly:
+1. Increase the wait time
+2. Check if the website blocks automated browsers
+3. Some sites may require additional headers or cookies
 
-## 🔧 Configuration
+### Element Not Found
 
-All services have been configured with production-ready defaults:
+If an element isn't detected:
+1. Try using the Visual Selector to find it
+2. Use browser DevTools to inspect the element
+3. Try different selector types (CSS, XPath, etc.)
 
-- **PostgreSQL**: 512MB memory limit, 0.5 CPU
-- **Redis**: 256MB memory limit, 0.25 CPU
-- **MinIO**: 512MB memory limit, 0.5 CPU
-- **Backend**: 1GB memory limit, 1 CPU
-- **Worker**: 2GB memory limit, 1 CPU
-- **Frontend**: 512MB memory limit, 0.5 CPU
-- **Nginx**: 128MB memory limit, 0.25 CPU
+## 🌐 Supported Websites
 
-## 🐛 Troubleshooting
+Web Scraper Pro works with most websites, including:
+- Static HTML sites
+- JavaScript-rendered sites (SPA)
+- E-commerce sites
+- News websites
+- Blogs
+- Documentation sites
 
-### Common Issues
+**Note:** Some websites may have anti-scraping measures. Always respect robots.txt and terms of service.
 
-1. **Playwright Browser Issues**:
-   ```bash
-   docker-compose exec backend playwright install chromium --with-deps
-   ```
+## 📝 License
 
-2. **Database Connection Issues**:
-   - Check PostgreSQL is running: `docker-compose logs db`
-   - Verify credentials in environment variables
+This project is open source and available under the MIT License.
 
-3. **MinIO Access Issues**:
-   - Ensure MinIO is running: `docker-compose logs minio`
-   - Check MinIO credentials and bucket creation
+## 🤝 Contributing
 
-4. **Frontend-Backend Communication**:
-   - Verify API endpoints are accessible
-   - Check CORS configuration in backend
+Contributions are welcome! Feel free to:
+- Report bugs
+- Suggest features
+- Submit pull requests
 
-### View Logs
-```bash
-# View all logs
-make logs
+## 📧 Support
 
-# View specific service
-docker-compose logs backend
-docker-compose logs worker
-docker-compose logs frontend
-```
+For issues or questions:
+1. Check the troubleshooting section
+2. Review the help modal in the app (click "Help" button)
+3. Open an issue on GitHub
 
-## 🚀 Deployment
+---
 
-For production deployment:
-
-1. Update environment variables with secure values
-2. Configure SSL certificates in nginx/nginx.conf
-3. Set up proper domain names
-4. Configure backup strategies for PostgreSQL and MinIO
-5. Set up monitoring and alerting
-
-## 📄 License
-
-MIT
+**Happy Scraping! 🕷️**
