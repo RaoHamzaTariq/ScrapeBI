@@ -1,8 +1,8 @@
-# 🕷️ Web Scraper Pro - No-Code Web Scraping Tool
+# 🕷️ ScrapeBI - No-Code Web Scraping Tool
 
 A powerful, user-friendly web scraping tool built with Python, Selenium, and Flask. Features a visual element selector that allows you to extract data from websites without writing any code.
 
-![Web Scraper Pro](https://img.shields.io/badge/Web%20Scraper%20Pro-v1.0-blue)
+![ScrapeBI](https://img.shields.io/badge/ScrapeBI-v1.0-blue)
 ![Python](https://img.shields.io/badge/Python-3.8+-green)
 ![Flask](https://img.shields.io/badge/Flask-2.3.3-orange)
 ![Selenium](https://img.shields.io/badge/Selenium-4.15.2-red)
@@ -60,7 +60,7 @@ python app.py
 The application will:
 - Start the Flask server at `http://localhost:5000`
 - Automatically open your web browser
-- Display the Web Scraper Pro interface
+- Display the ScrapeBI interface
 
 ## 📖 How to Use
 
@@ -208,7 +208,7 @@ If an element isn't detected:
 
 ## 🌐 Supported Websites
 
-Web Scraper Pro works with most websites, including:
+ScrapeBI works with most websites, including:
 - Static HTML sites
 - JavaScript-rendered sites (SPA)
 - E-commerce sites
