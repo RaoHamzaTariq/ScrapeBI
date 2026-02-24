@@ -2,12 +2,19 @@
 
 A powerful, user-friendly web scraping tool built with Python, Selenium, and Flask. Features a visual element selector that allows you to extract data from websites without writing any code.
 
-![ScrapeBI Logo](public/logo.png)
+<p align="center">
+  <img src="public/logo.png" alt="ScrapeBI Logo" width="120">
+</p>
 
-![ScrapeBI](https://img.shields.io/badge/ScrapeBI-v1.0-blue)
-![Python](https://img.shields.io/badge/Python-3.8+-green)
-![Flask](https://img.shields.io/badge/Flask-2.3.3-orange)
-![Selenium](https://img.shields.io/badge/Selenium-4.15.2-red)
+<p align="center">
+  <img src="https://img.shields.io/badge/ScrapeBI-v1.0-blue" alt="ScrapeBI">
+  <img src="https://img.shields.io/badge/Python-3.8+-green" alt="Python">
+  <img src="https://img.shields.io/badge/Flask-2.3.3-orange" alt="Flask">
+  <img src="https://img.shields.io/badge/Selenium-4.15.2-red" alt="Selenium">
+  <img src="https://img.shields.io/badge/License-MIT-lightgrey" alt="License">
+  <img src="https://img.shields.io/github/stars/yourusername/ScrapeBI?style=social" alt="GitHub stars">
+  <img src="https://img.shields.io/github/last-commit/yourusername/ScrapeBI" alt="Last commit">
+</p>
 
 ## ✨ Features
 
