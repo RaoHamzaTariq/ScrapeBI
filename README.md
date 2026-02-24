@@ -3,7 +3,7 @@
 A powerful, user-friendly web scraping tool built with Python, Selenium, and Flask. Features a visual element selector that allows you to extract data from websites without writing any code.
 
 <p align="center">
-  <img src="public/logo.png" alt="ScrapeBI Logo" width="120">
+  <img src="public/logo.png" alt="ScrapeBI Logo" width="300">
 </p>
 
 <p align="center">
