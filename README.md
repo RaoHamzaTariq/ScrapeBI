@@ -1,9 +1,11 @@
-# 🕷️ ScrapeBI - No-Code Web Scraping Tool
+<p align="center">
+  <img src="public/logo.png" alt="ScrapeBI Logo" width="250">
+</p>
 
-A powerful, user-friendly web scraping tool built with Python, Selenium, and Flask. Features a visual element selector that allows you to extract data from websites without writing any code.
+<h1 align="center">🕷️ ScrapeBI - No-Code Web Scraping Tool</h1>
 
 <p align="center">
-  <img src="public/logo.png" alt="ScrapeBI Logo" width="300">
+  A powerful, user-friendly web scraping tool built with Python, Selenium, and Flask. Features a visual element selector that allows you to extract data from websites without writing any code.
 </p>
 
 <p align="center">
@@ -12,8 +14,10 @@ A powerful, user-friendly web scraping tool built with Python, Selenium, and Fla
   <img src="https://img.shields.io/badge/Flask-2.3.3-orange" alt="Flask">
   <img src="https://img.shields.io/badge/Selenium-4.15.2-red" alt="Selenium">
   <img src="https://img.shields.io/badge/License-MIT-lightgrey" alt="License">
-  <img src="https://img.shields.io/github/stars/yourusername/ScrapeBI?style=social" alt="GitHub stars">
-  <img src="https://img.shields.io/github/last-commit/yourusername/ScrapeBI" alt="Last commit">
+  <img src="https://img.shields.io/github/stars/RaoHamzaTariq/ScrapeBI?style=social" alt="GitHub stars">
+  <img src="https://img.shields.io/github/forks/RaoHamzaTariq/ScrapeBI?style=social" alt="GitHub forks">
+  <img src="https://img.shields.io/github/issues/RaoHamzaTariq/ScrapeBI" alt="GitHub issues">
+  <img src="https://img.shields.io/github/last-commit/RaoHamzaTariq/ScrapeBI" alt="Last commit">
 </p>
 
 ## ✨ Features
