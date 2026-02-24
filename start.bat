@@ -1,12 +1,12 @@
 @echo off
 chcp 65001 >nul
-title Web Scraper Pro
+title ScrapeBI
 color 0A
 
 echo.
 echo ╔══════════════════════════════════════════════════════════════════╗
 echo ║                                                                  ║
-echo ║           🕷️  WEB SCRAPER PRO - No-Code Scraping Tool           ║
+echo ║              🕷️  ScrapeBI - No-Code Scraping Tool                ║
 echo ║                                                                  ║
 echo ╚══════════════════════════════════════════════════════════════════╝
 echo.

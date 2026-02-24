@@ -2,6 +2,8 @@
 
 A powerful, user-friendly web scraping tool built with Python, Selenium, and Flask. Features a visual element selector that allows you to extract data from websites without writing any code.
 
+![ScrapeBI Logo](public/logo.png)
+
 ![ScrapeBI](https://img.shields.io/badge/ScrapeBI-v1.0-blue)
 ![Python](https://img.shields.io/badge/Python-3.8+-green)
 ![Flask](https://img.shields.io/badge/Flask-2.3.3-orange)
@@ -31,7 +33,7 @@ A powerful, user-friendly web scraping tool built with Python, Selenium, and Fla
 
 2. **Navigate to the project directory:**
 ```bash
-cd web_scraper_project
+cd ScrapeBI
 ```
 
 3. **Install dependencies:**
@@ -149,7 +151,7 @@ Use the sidebar to quickly extract common elements:
 ## 🏗️ Project Structure
 
 ```
-web_scraper_project/
+ScrapeBI/
 ├── app.py                 # Main Flask application
 ├── run.py                 # Entry point script
 ├── requirements.txt       # Python dependencies

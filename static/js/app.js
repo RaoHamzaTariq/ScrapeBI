@@ -1,4 +1,4 @@
-// Web Scraper Pro - Enhanced Frontend JavaScript
+// ScrapeBI - Enhanced Frontend JavaScript
 // Modern interactions, animations, and improved UX
 
 let currentSessionId = null;

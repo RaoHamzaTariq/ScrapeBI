@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# Web Scraper Pro - Start Script for Linux/Mac
+# ScrapeBI - Start Script for Linux/Mac
 
 clear
 
 echo ""
 echo "╔══════════════════════════════════════════════════════════════════╗"
 echo "║                                                                  ║"
-echo "║           🕷️  WEB SCRAPER PRO - No-Code Scraping Tool           ║"
+echo "║              🕷️  ScrapeBI - No-Code Scraping Tool                ║"
 echo "║                                                                  ║"
 echo "╚══════════════════════════════════════════════════════════════════╝"
 echo ""

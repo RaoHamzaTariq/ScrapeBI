@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Web Scraper Pro - Main Entry Point
+ScrapeBI - Main Entry Point
 Run this file to start the complete web scraping application
 """
 
@@ -16,7 +16,7 @@ def print_banner():
     banner = """
     ╔══════════════════════════════════════════════════════════════════╗
     ║                                                                  ║
-    ║           🕷️  WEB SCRAPER PRO - No-Code Scraping Tool           ║
+    ║              🕷️  ScrapeBI - No-Code Scraping Tool                ║
     ║                                                                  ║
     ║   A powerful web scraping tool with visual element selector     ║
     ║                                                                  ║
@@ -88,7 +88,7 @@ def check_chrome():
 
 def start_server():
     """Start the Flask server"""
-    print("🚀 Starting Web Scraper Pro server...")
+    print("🚀 Starting ScrapeBI server...")
     print("-" * 60)
     
     try:
@@ -122,7 +122,7 @@ def start_server():
 
 def signal_handler(sig, frame):
     """Handle Ctrl+C gracefully"""
-    print("\n\n👋 Shutting down Web Scraper Pro...")
+    print("\n\n👋 Shutting down ScrapeBI...")
     print("🧹 Cleaning up resources...")
     
     try:
@@ -146,7 +146,7 @@ def main():
     # Check if we're in the right directory
     if not os.path.exists('app.py'):
         print("❌ Error: app.py not found!")
-        print("Please run this script from the web_scraper_project directory.")
+        print("Please run this script from the ScrapeBI directory.")
         sys.exit(1)
     
     # Check dependencies

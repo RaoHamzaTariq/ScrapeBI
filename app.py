@@ -1,5 +1,5 @@
 """
-Web Scraper Pro - No-Code Web Scraping Tool
+ScrapeBI - No-Code Web Scraping Tool
 A complete web scraping solution with visual element selector
 """
 
@@ -24,7 +24,7 @@ from urllib.parse import urlparse
 import pandas as pd
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'web-scraper-pro-secret-key'
+app.config['SECRET_KEY'] = 'scrapebi-secret-key'
 
 # Global storage for scraped data
 scraped_data_store = {}
@@ -615,12 +615,12 @@ def batch_extract():
 
 if __name__ == '__main__':
     print("=" * 60)
-    print("Web Scraper Pro - No-Code Web Scraping Tool")
+    print("ScrapeBI - No-Code Web Scraping Tool")
     print("=" * 60)
     print("Starting server at http://localhost:5000")
     print("Press Ctrl+C to stop")
     print("=" * 60)
-    
+
     try:
         app.run(debug=True, host='0.0.0.0', port=5000, threaded=True)
     finally:
