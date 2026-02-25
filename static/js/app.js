@@ -130,38 +130,55 @@ function showToast(message, type = 'info', duration = 3000) {
 // Update progress step indicator
 function updateStepIndicator(step) {
     currentStep = step;
-    
+
     document.querySelectorAll('.step-item').forEach(item => {
         const itemStep = parseInt(item.dataset.step);
         const circle = item.querySelector('.step-circle');
         const textPrimary = item.querySelector('p:first-child');
         const textSecondary = item.querySelector('p:last-child');
-        
+
         if (itemStep < step) {
             // Completed step
-            circle.className = 'step-circle w-12 h-12 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center text-white font-bold shadow-md transition-all duration-300';
+            circle.className = 'step-circle w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm';
+            circle.style.background = 'linear-gradient(135deg, #10B981 0%, #34D399 100%)';
+            circle.style.boxShadow = '0 0 20px rgba(16, 185, 129, 0.4)';
             circle.innerHTML = '<i class="fas fa-check"></i>';
-            textPrimary.className = 'text-sm font-semibold text-green-700';
-            textSecondary.className = 'text-xs text-green-600';
+            if (textPrimary) {
+                textPrimary.className = 'text-sm font-semibold text-emerald-400';
+            }
+            if (textSecondary) {
+                textSecondary.className = 'text-xs text-emerald-500';
+            }
         } else if (itemStep === step) {
             // Active step
-            circle.className = 'step-circle w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-bold shadow-md transition-all duration-300';
-            textPrimary.className = 'text-sm font-semibold text-gray-800';
-            textSecondary.className = 'text-xs text-gray-500';
+            circle.className = 'step-circle w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm';
+            circle.style.background = 'linear-gradient(135deg, #2E9BFF 0%, #7CFBFF 100%)';
+            circle.style.boxShadow = '0 0 20px rgba(46, 155, 255, 0.4)';
+            if (textPrimary) {
+                textPrimary.className = 'text-sm font-semibold text-white';
+            }
+            if (textSecondary) {
+                textSecondary.className = 'text-xs text-gray-300';
+            }
         } else {
             // Pending step
-            circle.className = 'step-circle w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 font-bold transition-all duration-300';
-            textPrimary.className = 'text-sm font-semibold text-gray-500';
-            textSecondary.className = 'text-xs text-gray-400';
+            circle.className = 'step-circle w-10 h-10 rounded-full flex items-center justify-center text-gray-400 font-bold text-sm';
+            circle.style.background = '#0F2050';
+            if (textPrimary) {
+                textPrimary.className = 'text-sm font-semibold text-gray-400';
+            }
+            if (textSecondary) {
+                textSecondary.className = 'text-xs text-gray-500';
+            }
         }
     });
 
     // Update step lines
     document.querySelectorAll('.step-line').forEach((line, index) => {
         if (index < step - 1) {
-            line.className = 'flex-1 h-1 bg-green-500 mx-4 step-line transition-all duration-500';
+            line.style.background = '#10B981';
         } else {
-            line.className = 'flex-1 h-1 bg-gray-200 mx-4 step-line transition-all duration-500';
+            line.style.background = '#4B5563';
         }
     });
 }
@@ -1276,14 +1293,14 @@ async function exportResults(format) {
         return;
     }
 
-    // Flatten results for export
+    // Flatten results for export - keep objects as-is for backend to handle
     const flatResults = [];
     for (const [ruleName, results] of Object.entries(extractionResults)) {
         results.forEach((result, index) => {
             flatResults.push({
                 rule: ruleName,
                 index: index + 1,
-                value: typeof result === 'object' ? JSON.stringify(result) : result
+                value: result  // Pass raw value (can be string, object, or array)
             });
         });
     }
@@ -1304,9 +1321,14 @@ async function exportResults(format) {
             const a = document.createElement('a');
             a.href = url;
             a.download = `extracted_data_${new Date().getTime()}.${format}`;
+            document.body.appendChild(a);
             a.click();
+            document.body.removeChild(a);
             URL.revokeObjectURL(url);
             showToast(`Results exported as ${format.toUpperCase()}!`, 'success');
+        } else {
+            const errorData = await response.json();
+            showToast('Export failed: ' + (errorData.error || 'Unknown error'), 'error');
         }
     } catch (error) {
         showToast('Error exporting: ' + error.message, 'error');

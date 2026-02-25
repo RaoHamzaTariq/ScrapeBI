@@ -456,28 +456,67 @@ def export_data():
 
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
     filename = f"extracted_data_{timestamp}"
-    
+
     # Use Windows-compatible temp directory
     temp_dir = tempfile.gettempdir()
 
     try:
         if export_format == 'json':
+            # Export as structured JSON with rule names as keys
             filepath = os.path.join(temp_dir, f"{filename}.json")
+            # Reorganize data by rule name
+            structured_data = {}
+            for item in extracted_data:
+                rule_name = item.get('rule', 'unnamed')
+                value = item.get('value', '')
+                if rule_name not in structured_data:
+                    structured_data[rule_name] = []
+                structured_data[rule_name].append(value)
             with open(filepath, 'w', encoding='utf-8') as f:
-                json.dump(extracted_data, f, indent=2, ensure_ascii=False)
+                json.dump(structured_data, f, indent=2, ensure_ascii=False)
             return send_file(filepath, as_attachment=True, download_name=f"{filename}.json")
 
         elif export_format == 'csv':
+            # Export with columns: rule, index, value
             filepath = os.path.join(temp_dir, f"{filename}.csv")
-            df = pd.DataFrame(extracted_data)
-            df.to_csv(filepath, index=False, encoding='utf-8')
+            # Prepare data for CSV - handle nested objects
+            csv_data = []
+            for item in extracted_data:
+                row = {
+                    'rule': item.get('rule', 'unnamed'),
+                    'index': item.get('index', ''),
+                    'value': item.get('value', '')
+                }
+                # If value is a dict/list, convert to JSON string
+                if isinstance(row['value'], (dict, list)):
+                    row['value'] = json.dumps(row['value'], ensure_ascii=False)
+                csv_data.append(row)
+            df = pd.DataFrame(csv_data)
+            df.to_csv(filepath, index=False, encoding='utf-8', quoting=1)  # QUOTE_ALL
             return send_file(filepath, as_attachment=True, download_name=f"{filename}.csv")
 
         elif export_format == 'txt':
+            # Export as clean text with rule headers
             filepath = os.path.join(temp_dir, f"{filename}.txt")
+            # Group by rule name for cleaner output
+            rules_data = {}
+            for item in extracted_data:
+                rule_name = item.get('rule', 'unnamed')
+                value = item.get('value', '')
+                if rule_name not in rules_data:
+                    rules_data[rule_name] = []
+                rules_data[rule_name].append(value)
+            
             with open(filepath, 'w', encoding='utf-8') as f:
-                for item in extracted_data:
-                    f.write(str(item) + '\n')
+                for rule_name, values in rules_data.items():
+                    f.write(f"=== {rule_name} ===\n")
+                    f.write("-" * 50 + "\n")
+                    for i, value in enumerate(values, 1):
+                        # Handle dict/list values
+                        if isinstance(value, (dict, list)):
+                            value = json.dumps(value, ensure_ascii=False, indent=2)
+                        f.write(f"{i}. {value}\n")
+                    f.write("\n")
             return send_file(filepath, as_attachment=True, download_name=f"{filename}.txt")
 
         else:
