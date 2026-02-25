@@ -20,6 +20,50 @@
   <img src="https://img.shields.io/github/last-commit/RaoHamzaTariq/ScrapeBI" alt="Last commit">
 </p>
 
+## 📚 Documentation
+
+Comprehensive documentation is available in the [`docs/`](docs/) folder:
+
+### Getting Started
+| Document | Description |
+|----------|-------------|
+| [📖 Installation Guide](docs/installation.md) | Step-by-step installation for Windows, macOS, and Linux |
+| [🚀 Quick Start](docs/quickstart.md) | Get up and running in 5 minutes |
+| [🎯 First Scraper](docs/first-scraper.md) | Create your first web scraper |
+
+### User Guides
+| Document | Description |
+|----------|-------------|
+| [📝 Basic Usage](docs/basic-usage.md) | Core features and functionality |
+| [👁️ Visual Selector](docs/visual-selector.md) | Using the visual element selector |
+| [🎯 Extraction Rules](docs/extraction-rules.md) | Creating and managing extraction rules |
+| [📤 Export Data](docs/export-data.md) | Exporting scraped data to JSON, CSV, TXT |
+
+### Advanced Topics
+| Document | Description |
+|----------|-------------|
+| [🔧 Advanced Selectors](docs/advanced-selectors.md) | CSS and XPath techniques |
+| [⚡ Dynamic Websites](docs/dynamic-websites.md) | Scraping JavaScript-heavy sites |
+| [📊 Batch Processing](docs/batch-processing.md) | Running multiple extractions |
+| [✅ Best Practices](docs/best-practices.md) | Tips for effective scraping |
+
+### Reference
+| Document | Description |
+|----------|-------------|
+| [📋 API Reference](docs/api-reference.md) | Backend API documentation |
+| [⚙️ Configuration](docs/configuration.md) | Configuration options |
+| [🔧 Troubleshooting](docs/troubleshooting.md) | Common issues and solutions |
+| [❓ FAQ](docs/faq.md) | Frequently asked questions |
+
+### Development
+| Document | Description |
+|----------|-------------|
+| [🤝 Contributing](docs/contributing.md) | How to contribute to ScrapeBI |
+| [💻 Development Setup](docs/development.md) | Setting up development environment |
+| [🏗️ Architecture](docs/architecture.md) | System architecture overview |
+
+---
+
 ## ✨ Features
 
 - 🔍 **Visual Element Selector** - Click on elements in a live preview to select them
@@ -40,40 +84,28 @@
 
 ### Installation
 
-1. **Extract the project files** to a folder
+1. **Clone or download the project:**
+   ```bash
+   git clone https://github.com/RaoHamzaTariq/ScrapeBI.git
+   cd ScrapeBI
+   ```
 
-2. **Navigate to the project directory:**
-```bash
-cd ScrapeBI
-```
+2. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-3. **Install dependencies:**
-```bash
-pip install -r requirements.txt
-```
+3. **Run ScrapeBI:**
+   ```bash
+   python run.py
+   ```
 
-Or simply run:
-```bash
-python run.py
-```
-The script will automatically check and install missing dependencies.
+   Or simply double-click `start.bat` (Windows) or run `./start.sh` (macOS/Linux).
 
-### Running the Application
+4. **Open your browser:**
+   The application will automatically open at `http://localhost:5000`
 
-**Option 1: Using the main runner (Recommended)**
-```bash
-python run.py
-```
-
-**Option 2: Using Flask directly**
-```bash
-python app.py
-```
-
-The application will:
-- Start the Flask server at `http://localhost:5000`
-- Automatically open your web browser
-- Display the ScrapeBI interface
+For detailed installation instructions, see the [Installation Guide](docs/installation.md).
 
 ## 📖 How to Use
 
@@ -83,64 +115,29 @@ The application will:
 2. Set the wait time (how long to wait for the page to load)
 3. Click the **"Scrape"** button
 
-### 2. Visual Element Selector
+### 2. Select Elements
 
-- Switch to the **"Visual Selector"** tab
-- See a live preview of the scraped page
-- Hover over elements to highlight them
-- Click on any element to select it
-- View the element's details and create an extraction rule
+- **Visual Selector:** See a live preview and click elements to select them
+- **Element List:** Browse elements organized by category (headings, links, images, etc.)
 
-### 3. Element List
-
-- Switch to the **"Element List"** tab
-- Browse elements organized by category:
-  - Headings (H1-H6)
-  - Links
-  - Images
-  - Paragraphs
-  - Tables
-  - Lists
-  - Forms
-  - Buttons
-  - Input fields
-- Click on any element to select it
-
-### 4. Create Extraction Rules
+### 3. Create Extraction Rules
 
 1. Click **"Add Rule"** or select an element
-2. Enter a name for the rule
-3. Choose the selector type:
-   - **CSS Selector** - Most common (e.g., `.class`, `#id`, `div > p`)
-   - **XPath** - For complex selections
-   - **Tag Name** - Select by HTML tag
-   - **Class Name** - Select by class
-   - **ID** - Select by ID
-4. Enter the selector value
-5. Choose what to extract:
-   - Text Content
-   - HTML Content
-   - Href (for links)
-   - Src (for images)
-   - Alt text
-   - Title attribute
-   - And more...
-6. Click **"Save Rule"**
+2. Choose selector type (CSS, XPath, Tag, Class, or ID)
+3. Enter the selector value
+4. Choose what to extract (text, HTML, href, src, etc.)
+5. Click **"Save Rule"**
 
-### 5. Run Extraction
+### 4. Export Data
 
-- Click the play button (▶) on any rule to run it
-- Or click **"Run All Rules"** to execute all rules at once
-- View results in the **"Results"** tab
+- Run extraction rules
+- Export results as **JSON**, **CSV**, or **TXT**
 
-### 6. Export Data
-
-- Switch to the **"Results"** tab
-- Click **JSON**, **CSV**, or **TXT** to export in your preferred format
+For a complete tutorial, see the [Quick Start Guide](docs/quickstart.md).
 
 ## 🎯 Quick Extract Shortcuts
 
-Use the sidebar to quickly extract common elements:
+Use the sidebar for instant extraction:
 - **All Headings** - Extract all H1-H6 elements
 - **All Links** - Extract all link URLs
 - **All Images** - Extract all image sources
@@ -159,6 +156,8 @@ Use the sidebar to quickly extract common elements:
 | `.product .price` | Price elements inside product |
 | `[data-testid]` | Elements with data-testid attribute |
 
+For more selector examples, see the [Advanced Selectors Guide](docs/advanced-selectors.md).
+
 ## 🏗️ Project Structure
 
 ```
@@ -166,31 +165,40 @@ ScrapeBI/
 ├── app.py                 # Main Flask application
 ├── run.py                 # Entry point script
 ├── requirements.txt       # Python dependencies
-├── README.md             # This file
+├── README.md              # This file
+├── .gitignore             # Git ignore file
+├── docs/                  # Documentation folder
+│   ├── README.md          # Documentation index
+│   ├── installation.md    # Installation guide
+│   ├── quickstart.md      # Quick start guide
+│   ├── advanced-selectors.md  # Selectors guide
+│   └── troubleshooting.md # Troubleshooting guide
 ├── templates/
-│   └── index.html        # Main UI template
-└── static/
-    └── js/
-        └── app.js        # Frontend JavaScript
+│   └── index.html         # Main UI template
+├── static/
+│   ├── css/
+│   │   └── style.css      # Custom styles
+│   ├── js/
+│   │   └── app.js         # Frontend JavaScript
+│   └── logo.png           # Application logo
+└── public/
+    └── logo.png           # Public logo
 ```
 
 ## 🔧 Advanced Usage
 
 ### Custom Wait Time
-
 Increase the wait time for pages that load slowly or have heavy JavaScript:
 - Default: 3 seconds
 - Range: 1-10 seconds
 
 ### Batch Extraction
-
 Create multiple rules and run them all at once:
 1. Create rules for different data points
 2. Click **"Run All Rules"**
 3. All results will be displayed together
 
 ### Saved Rules
-
 Rules are saved in memory during the session. To reuse rules:
 1. Create and save rules
 2. They appear in the sidebar
@@ -199,25 +207,24 @@ Rules are saved in memory during the session. To reuse rules:
 ## 🛠️ Troubleshooting
 
 ### ChromeDriver Issues
-
 If you see ChromeDriver errors:
 1. Make sure Google Chrome is installed
 2. The webdriver-manager will auto-download the correct ChromeDriver
 3. If issues persist, manually install ChromeDriver matching your Chrome version
 
 ### Page Not Loading
-
 If a page doesn't load properly:
 1. Increase the wait time
 2. Check if the website blocks automated browsers
 3. Some sites may require additional headers or cookies
 
 ### Element Not Found
-
 If an element isn't detected:
 1. Try using the Visual Selector to find it
 2. Use browser DevTools to inspect the element
 3. Try different selector types (CSS, XPath, etc.)
+
+For more troubleshooting tips, see the [Troubleshooting Guide](docs/troubleshooting.md).
 
 ## 🌐 Supported Websites
 
@@ -229,11 +236,11 @@ ScrapeBI works with most websites, including:
 - Blogs
 - Documentation sites
 
-**Note:** Some websites may have anti-scraping measures. Always respect robots.txt and terms of service.
+**Note:** Some websites may have anti-scraping measures. Always respect `robots.txt` and terms of service.
 
 ## 📝 License
 
-This project is open source and available under the MIT License.
+This project is open source and available under the [MIT License](LICENSE).
 
 ## 🤝 Contributing
 
@@ -242,13 +249,25 @@ Contributions are welcome! Feel free to:
 - Suggest features
 - Submit pull requests
 
+See the [Contributing Guide](docs/contributing.md) for details.
+
 ## 📧 Support
 
 For issues or questions:
-1. Check the troubleshooting section
-2. Review the help modal in the app (click "Help" button)
-3. Open an issue on GitHub
+1. Check the [Troubleshooting Guide](docs/troubleshooting.md)
+2. Review the [FAQ](docs/faq.md)
+3. Read the help modal in the app (click "Help" button)
+4. Open an issue on GitHub
+
+## 🔗 Links
+
+- [GitHub Repository](https://github.com/RaoHamzaTariq/ScrapeBI)
+- [Full Documentation](docs/README.md)
+- [Report an Issue](https://github.com/RaoHamzaTariq/ScrapeBI/issues)
+- [Request a Feature](https://github.com/RaoHamzaTariq/ScrapeBI/issues)
 
 ---
 
-**Happy Scraping! 🕷️**
+<p align="center">
+  <strong>Happy Scraping! 🕷️</strong>
+</p>

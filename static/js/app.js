@@ -761,6 +761,13 @@ function createRuleFromSelection() {
 async function loadPreview() {
     if (!currentSessionId) return;
 
+    const frame = document.getElementById('previewFrame');
+    const noPreview = document.getElementById('noPreview');
+    const previewError = document.getElementById('previewError');
+    
+    // Hide error state
+    if (previewError) previewError.classList.add('hidden');
+
     try {
         const response = await fetch('/api/preview_html', {
             method: 'POST',
@@ -771,29 +778,71 @@ async function loadPreview() {
         const data = await response.json();
 
         if (data.success) {
-            document.getElementById('noPreview').classList.add('hidden');
-            const frame = document.getElementById('previewFrame');
+            noPreview.classList.add('hidden');
             frame.classList.remove('hidden');
+            
+            // Set up error handling for iframe
+            frame.onload = function() {
+                console.log('Preview loaded successfully');
+            };
+            
+            frame.onerror = function() {
+                console.error('Preview frame error');
+                showPreviewError();
+            };
+            
             frame.srcdoc = data.html;
+            
+            // Timeout to detect if page fails to load
+            setTimeout(() => {
+                try {
+                    // Try to access iframe content - will fail if there's an error
+                    const iframeDoc = frame.contentDocument || frame.contentWindow.document;
+                    if (iframeDoc && iframeDoc.readyState === 'complete') {
+                        console.log('Preview fully loaded');
+                    }
+                } catch (e) {
+                    // Can't access iframe - likely a security error
+                    console.log('Cannot access iframe content (expected for some sites)');
+                }
+            }, 5000);
         }
     } catch (error) {
         console.error('Error loading preview:', error);
-        showToast('Failed to load preview', 'error');
+        showPreviewError();
     }
+}
+
+// Show preview error state
+function showPreviewError() {
+    const frame = document.getElementById('previewFrame');
+    const noPreview = document.getElementById('noPreview');
+    const previewError = document.getElementById('previewError');
+    
+    if (frame) frame.classList.add('hidden');
+    if (noPreview) noPreview.classList.add('hidden');
+    if (previewError) previewError.classList.remove('hidden');
+    
+    console.log('Showing preview error message');
 }
 
 // Refresh preview
 function refreshPreview() {
     const frame = document.getElementById('previewFrame');
-    frame.style.opacity = '0.5';
+    const previewError = document.getElementById('previewError');
     
+    // Hide error if present
+    if (previewError) previewError.classList.add('hidden');
+    
+    frame.style.opacity = '0.5';
+
     setTimeout(() => {
         loadPreview();
         setTimeout(() => {
             frame.style.opacity = '1';
         }, 200);
     }, 300);
-    
+
     showToast('Preview refreshed', 'info');
 }
 

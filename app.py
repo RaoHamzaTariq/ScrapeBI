@@ -579,7 +579,7 @@ def preview_html():
                 }, '*');
             });
         });
-        
+
         // Prevent navigation
         document.querySelectorAll('a').forEach(a => {
             a.addEventListener('click', function(e) {
