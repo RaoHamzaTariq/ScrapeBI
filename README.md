@@ -1,13 +1,22 @@
-# 🕷️ ScrapeBI - No-Code Web Scraping Tool
+<p align="center">
+  <img src="public/logo.png" alt="ScrapeBI Logo" width="200">
+</p>
 
-A powerful, user-friendly web scraping tool built with Python, Selenium, and Flask. Features a visual element selector that allows you to extract data from websites without writing any code.
+<h1 align="center">🕷️ ScrapeBI - No-Code Web Scraping Tool</h1>
 
-![ScrapeBI Logo](public/logo.png)
+<p align="center">
+  A powerful, user-friendly web scraping tool built with Python, Selenium, and Flask. Features a visual element selector that allows you to extract data from websites without writing any code.
+</p>
 
-![ScrapeBI](https://img.shields.io/badge/ScrapeBI-v1.0-blue)
-![Python](https://img.shields.io/badge/Python-3.8+-green)
-![Flask](https://img.shields.io/badge/Flask-2.3.3-orange)
-![Selenium](https://img.shields.io/badge/Selenium-4.15.2-red)
+<p align="center">
+  <img src="https://img.shields.io/badge/ScrapeBI-v1.0-blue" alt="ScrapeBI">
+  <img src="https://img.shields.io/badge/Python-3.8+-green" alt="Python">
+  <img src="https://img.shields.io/badge/Flask-2.3.3-orange" alt="Flask">
+  <img src="https://img.shields.io/badge/Selenium-4.15.2-red" alt="Selenium">
+  <img src="https://img.shields.io/badge/License-MIT-lightgrey" alt="License">
+</p>
+
+![ScrapeBI Preview](public/preview.png)
 
 ## ✨ Features
 
