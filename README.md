@@ -1,68 +1,13 @@
-<p align="center">
-  <img src="public/logo.png" alt="ScrapeBI Logo" width="250">
-</p>
+# 🕷️ ScrapeBI - No-Code Web Scraping Tool
 
-<h1 align="center">🕷️ ScrapeBI - No-Code Web Scraping Tool</h1>
+A powerful, user-friendly web scraping tool built with Python, Selenium, and Flask. Features a visual element selector that allows you to extract data from websites without writing any code.
 
-<p align="center">
-  A powerful, user-friendly web scraping tool built with Python, Selenium, and Flask. Features a visual element selector that allows you to extract data from websites without writing any code.
-</p>
+![ScrapeBI Logo](public/logo.png)
 
-<p align="center">
-  <img src="https://img.shields.io/badge/ScrapeBI-v1.0-blue" alt="ScrapeBI">
-  <img src="https://img.shields.io/badge/Python-3.8+-green" alt="Python">
-  <img src="https://img.shields.io/badge/Flask-2.3.3-orange" alt="Flask">
-  <img src="https://img.shields.io/badge/Selenium-4.15.2-red" alt="Selenium">
-  <img src="https://img.shields.io/badge/License-MIT-lightgrey" alt="License">
-  <img src="https://img.shields.io/github/stars/RaoHamzaTariq/ScrapeBI?style=social" alt="GitHub stars">
-  <img src="https://img.shields.io/github/forks/RaoHamzaTariq/ScrapeBI?style=social" alt="GitHub forks">
-  <img src="https://img.shields.io/github/issues/RaoHamzaTariq/ScrapeBI" alt="GitHub issues">
-  <img src="https://img.shields.io/github/last-commit/RaoHamzaTariq/ScrapeBI" alt="Last commit">
-</p>
-
-## 📚 Documentation
-
-Comprehensive documentation is available in the [`docs/`](docs/) folder:
-
-### Getting Started
-| Document | Description |
-|----------|-------------|
-| [📖 Installation Guide](docs/installation.md) | Step-by-step installation for Windows, macOS, and Linux |
-| [🚀 Quick Start](docs/quickstart.md) | Get up and running in 5 minutes |
-| [🎯 First Scraper](docs/first-scraper.md) | Create your first web scraper |
-
-### User Guides
-| Document | Description |
-|----------|-------------|
-| [📝 Basic Usage](docs/basic-usage.md) | Core features and functionality |
-| [👁️ Visual Selector](docs/visual-selector.md) | Using the visual element selector |
-| [🎯 Extraction Rules](docs/extraction-rules.md) | Creating and managing extraction rules |
-| [📤 Export Data](docs/export-data.md) | Exporting scraped data to JSON, CSV, TXT |
-
-### Advanced Topics
-| Document | Description |
-|----------|-------------|
-| [🔧 Advanced Selectors](docs/advanced-selectors.md) | CSS and XPath techniques |
-| [⚡ Dynamic Websites](docs/dynamic-websites.md) | Scraping JavaScript-heavy sites |
-| [📊 Batch Processing](docs/batch-processing.md) | Running multiple extractions |
-| [✅ Best Practices](docs/best-practices.md) | Tips for effective scraping |
-
-### Reference
-| Document | Description |
-|----------|-------------|
-| [📋 API Reference](docs/api-reference.md) | Backend API documentation |
-| [⚙️ Configuration](docs/configuration.md) | Configuration options |
-| [🔧 Troubleshooting](docs/troubleshooting.md) | Common issues and solutions |
-| [❓ FAQ](docs/faq.md) | Frequently asked questions |
-
-### Development
-| Document | Description |
-|----------|-------------|
-| [🤝 Contributing](docs/contributing.md) | How to contribute to ScrapeBI |
-| [💻 Development Setup](docs/development.md) | Setting up development environment |
-| [🏗️ Architecture](docs/architecture.md) | System architecture overview |
-
----
+![ScrapeBI](https://img.shields.io/badge/ScrapeBI-v1.0-blue)
+![Python](https://img.shields.io/badge/Python-3.8+-green)
+![Flask](https://img.shields.io/badge/Flask-2.3.3-orange)
+![Selenium](https://img.shields.io/badge/Selenium-4.15.2-red)
 
 ## ✨ Features
 
@@ -259,15 +204,6 @@ For issues or questions:
 3. Read the help modal in the app (click "Help" button)
 4. Open an issue on GitHub
 
-## 🔗 Links
-
-- [GitHub Repository](https://github.com/RaoHamzaTariq/ScrapeBI)
-- [Full Documentation](docs/README.md)
-- [Report an Issue](https://github.com/RaoHamzaTariq/ScrapeBI/issues)
-- [Request a Feature](https://github.com/RaoHamzaTariq/ScrapeBI/issues)
-
 ---
 
-<p align="center">
-  <strong>Happy Scraping! 🕷️</strong>
-</p>
+**Happy Scraping! 🕷️**
