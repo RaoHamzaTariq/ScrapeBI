@@ -600,7 +600,7 @@ ScrapeBI is released under the [MIT License](LICENSE).
 ```
 MIT License
 
-Copyright (c) 2024 ScrapeBI
+Copyright (c) 2026 ScrapeBI
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -637,7 +637,7 @@ ScrapeBI is built with love using these amazing open-source projects:
 
 ## 📰 Changelog
 
-### v1.0.0 (2024)
+### v1.0.0 (February 25, 2026)
 
 ```
 ✨ New Features
